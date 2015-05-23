@@ -143,7 +143,7 @@ angular.module('secret.controllers', [])
     }
 }])
 
-.controller('EditCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $stateParams) {    
+.controller('EditCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', '$timeout', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $stateParams, $timeout) {    
 
     console.log($stateParams.id)
 
@@ -171,8 +171,12 @@ angular.module('secret.controllers', [])
                 .success(function(newPost) {
                     ngNotify.set('Your post was added updated', {
                         type: 'success',
-                        duration: 2000
-                    });
+                        duration: 1000
+                    })
+                    
+                    $timeout(function() {
+                        $location.path('/main');
+                    }, 1000);
                 })
                 .error(function() {
                     console.log('Something went wrong');
