@@ -37,6 +37,12 @@ angular.module('TopSecret', ['secret.controllers', 'ui.router', 'ngResource', 'n
         }
       }
     })
+    
+    .state('edit', {
+      url: "/edit/:id",
+      templateUrl: "partials/edit.html",
+      controller: 'EditCtrl',
+    })
 })
 
 .run(function($rootScope, $timeout, $location) {

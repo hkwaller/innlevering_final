@@ -32,3 +32,30 @@ module.exports.delete = function(req, res) {
         });
     });
 };
+
+module.exports.postById = function(req, res) {
+
+    Post.findById(req.params.id, function(err, results) {
+        if (err) return err;
+        res.status(200).json(results);
+    });
+}
+
+module.exports.update = function(req, res) {
+    console.log(req.body);
+    Post.findById(req.body._id, function(err, result) {
+        if (err) return err;
+        
+        console.log(result);
+        result.title = req.body.title
+        result.text = req.body.text
+        result.public = req.body.public
+        
+        result.save(function(err, result) {
+            if (err) return err;
+            //websockets.broadcast('new_post', result)
+            res.status(201).json(result);
+        })
+        
+    });
+}

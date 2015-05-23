@@ -66,10 +66,9 @@ angular.module('secret.controllers', [])
         $scope.$apply(function() {
             $scope.posts.unshift(post);
             ngNotify.set('A new post was posted', {
-                    type: 'success',
-                    duration: 2000
-                });
-
+                type: 'success',
+                duration: 2000
+            });
         })
     });
     
@@ -105,7 +104,7 @@ angular.module('secret.controllers', [])
     }
     
     $scope.edit = function(post) {
-        $location.path('#/post/');
+        $location.path('/edit/' + post._id);
     }
 }])
     
@@ -138,6 +137,53 @@ angular.module('secret.controllers', [])
     
     $scope.logout = function() {
         delete $window.sessionStorage.token;
+        $http.defaults.headers.common['X-Auth'] = null;
+
+        $location.path('/');
+    }
+}])
+
+.controller('EditCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $stateParams) {    
+
+    console.log($stateParams.id)
+
+    $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
+
+    $http.get('/api/post/' + $stateParams.id)
+            .success(function(post) {
+                $scope.post = post;
+            })
+            .error(function(err) {
+                ngNotify.set('Something went wrong. I don\'t know what', {
+                        type: 'error',
+                        duration: 2000
+                    });
+            });
+
+    $scope.submit = function(post) {
+        if (post.title === undefined || post.text === undefined) {
+             ngNotify.set('Empty post, eh?', {
+                type: 'error',
+                duration: 2000
+            });
+        } else {
+            $http.post('/api/update', post)
+                .success(function(newPost) {
+                    ngNotify.set('Your post was added updated', {
+                        type: 'success',
+                        duration: 2000
+                    });
+                })
+                .error(function() {
+                    console.log('Something went wrong');
+                });
+        } 
+    }
+    
+    $scope.logout = function() {
+        delete $window.sessionStorage.token;
+        $http.defaults.headers.common['X-Auth'] = null;
+
         $location.path('/');
     }
 }])

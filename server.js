@@ -18,7 +18,9 @@ app.use(bodyParser.json());
 app.post('/authenticate', authController.authenticate)
 app.post('/signup', authController.signUp)
 app.post('/api/posts', postController.create)
+app.post('/api/update', postController.update)
 app.get('/api/posts', postController.list)
+app.get('/api/post/:id', postController.postById)
 app.delete('/api/posts', postController.delete)
 
 var port = process.env.PORT || 3000
