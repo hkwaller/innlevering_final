@@ -1,4 +1,4 @@
-angular.module('TopSecret', ['secret.controllers', 'ui.router', 'ngResource', 'toaster'])
+angular.module('TopSecret', ['secret.controllers', 'ui.router', 'ngResource', 'ngNotify'])
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     

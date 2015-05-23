@@ -1,10 +1,10 @@
 angular.module('secret.controllers', [])
 
-.controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', function($scope, $http, $animate, $window, $location, $rootScope) {
-//  $scope.user = {
-//    'username': 'kung',
-//    'password': 'cool'
-//  }
+.controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', 'ngNotify', function($scope, $http, $animate, $window, $location, $rootScope, ngNotify) {
+  $scope.user = {
+    'username': 'kung',
+    'password': 'cool'
+  }
     
   $scope.login = function(user) {
     $http.post('/authenticate', {username: user.username, password: user.password})
@@ -32,14 +32,21 @@ angular.module('secret.controllers', [])
                     "username":"",
                     "password":""
                 }
+                ngNotify.set('You are registered, now you can login', {
+                    type: 'success',
+                    duration: 2000
+                });
             })
             .error(function() {
-                console.log('Something went wrong');
+                ngNotify.set('Username is taken, try again', {
+                    type: 'error',
+                    duration: 2000
+                });
             });
 	};
 }])
     
-.controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'toaster', function($scope, $window, $location, $resource, toaster) {    
+.controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'ngNotify', function($scope, $window, $location, $resource, ngNotify) {    
     $scope.logout = function() {
         delete $window.sessionStorage.token;
         $location.path('/');
@@ -58,7 +65,10 @@ angular.module('secret.controllers', [])
     $scope.$on('ws:new_post', function(_, post) {
         $scope.$apply(function() {
             $scope.posts.unshift(post);
-            toaster.pop({type: 'success', title: "New post", body:"Oh look, a new post!"});
+            ngNotify.set('A new post was posted', {
+                    type: 'success',
+                    duration: 2000
+                });
 
         })
     });
@@ -68,7 +78,10 @@ angular.module('secret.controllers', [])
             angular.forEach($scope.posts, function(val, key) {
                 if (val._id === post._id) {
                     $scope.posts.splice($scope.posts.indexOf(val), 1);
-                    toaster.pop({type: 'error', title: "Deleted post", body:"Oh no, looks like someone deleted their not so brilliant post"});
+                    ngNotify.set('Someone deleted a post :(', {
+                        type: 'error',
+                        duration: 2000
+                    });
 
                     return;
                 }
@@ -81,7 +94,10 @@ angular.module('secret.controllers', [])
         Posts.remove({id: post._id}, function() {
             for (var i = 0; i < $scope.posts.length; i++) {
                 if (post._id === $scope.posts[i]._id) {
-                    toaster.pop({type: 'error', title: "Deleted post", body:"Your post is hereby deleted"});
+                   ngNotify.set('Your post is now doomed into oblivion', {
+                        type: 'error',
+                        duration: 2000
+                    });
                     $scope.posts.splice(i, 1);
                 }
             }
@@ -93,18 +109,24 @@ angular.module('secret.controllers', [])
     }
 }])
     
-.controller('PostCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'toaster', function($scope, $resource, $rootScope, $location, $http, $window, toaster) {    
+.controller('PostCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify) {    
     $scope.postController = true;
 
     $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
 
     $scope.submit = function(post) {
         if (post.title === undefined || post.text === undefined) {
-            toaster.pop({type: 'error', title: "Nothing here", body:"Dude, write something"});
+             ngNotify.set('Empty post, eh?', {
+                type: 'error',
+                duration: 2000
+            });
         } else {
             $http.post('/api/posts', post)
                 .success(function(newPost) {
-                    toaster.pop({type: 'success', title: "Success", body:"Your post was added to the brilliant archive"});
+                    ngNotify.set('Your post was added to the brilliant archive', {
+                        type: 'success',
+                        duration: 2000
+                    });
                     $scope.post = {};
                 })
                 .error(function() {
