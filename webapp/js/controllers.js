@@ -108,7 +108,7 @@ angular.module('secret.controllers', [])
     }
 }])
     
-.controller('PostCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify) {    
+.controller('PostCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$timeout', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $timeout) {    
     $scope.postController = true;
 
     $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
@@ -124,9 +124,11 @@ angular.module('secret.controllers', [])
                 .success(function(newPost) {
                     ngNotify.set('Your post was added to the brilliant archive', {
                         type: 'success',
-                        duration: 2000
+                        duration: 1000
                     });
-                    $scope.post = {};
+                    $timeout(function() {
+                        $location.path('/main');
+                    }, 1000)
                 })
                 .error(function() {
                     console.log('Something went wrong');
@@ -138,7 +140,6 @@ angular.module('secret.controllers', [])
     $scope.logout = function() {
         delete $window.sessionStorage.token;
         $http.defaults.headers.common['X-Auth'] = null;
-
         $location.path('/');
     }
 }])
@@ -167,7 +168,7 @@ angular.module('secret.controllers', [])
                 duration: 2000
             });
         } else {
-            $http.post('/api/update', post)
+            $http.put('/api/update', post)
                 .success(function(newPost) {
                     ngNotify.set('Your post was added updated', {
                         type: 'success',
@@ -187,7 +188,6 @@ angular.module('secret.controllers', [])
     $scope.logout = function() {
         delete $window.sessionStorage.token;
         $http.defaults.headers.common['X-Auth'] = null;
-
         $location.path('/');
     }
 }])
