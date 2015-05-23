@@ -1,0 +1,32 @@
+<ng-include src="'partials/nav.html'"></ng-include>
+<toaster-container toaster-options="{'time-out': 2000, 'close-button':false, 'animation-class': 'toast-top-center'}"></toaster-container>
+<div class="container">
+    <div class="row vertical-center" ng-show="posts.length === 0">
+        <div class="col col-md-12 text-center">
+            Nothing here yet
+        </div>
+    </div>
+    <div class="row" ng-show="posts.length > 0">
+        <div class="col col-md-12 text-center">
+            <div class="timeline">
+				  <dl ng-repeat="post in posts | orderBy:'-date'">
+					  <dd class="pos-right clearfix" ng-class="{'pos-left': $even }">
+						  <div class="circ"></div>
+						  <div class="events">
+                              <div class="bonus-padding">
+                                  <div class="events-body bonus-padding">
+                                      <h4 class="events-heading">{{ post.title }}</h4>
+                                      <p>{{ post.text }}</p>
+                                      <h4 class="events-heading">posted by {{ post.username }}</h4>
+                                  </div>
+                                  <button class="btn btn-info" ng-click="edit(post)">edit</button>
+                                  <button class="btn btn-info" ng-click="delete(post)">delete</button>
+                              </div>      
+						  </div>
+					  </dd>
+				  </dl>
+			  </div>
+        </div>
+    </div>
+    
+</div>

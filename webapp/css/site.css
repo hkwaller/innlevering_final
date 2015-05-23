@@ -1,0 +1,32 @@
+body {
+    background: #e5e5e5;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}
+
+.login-form {
+    background: #48cfad;
+    color: #fff;
+    padding: 3em 8em;
+}
+
+.navbar-no-corners {
+    border-radius: 0;
+}
+
+.four-em-padding {
+    padding: 4em;
+}
+
+.bonus-padding {
+    padding: 1em;
+}
+
+.circ {
+    background-color: #48cfad !important;
+}
