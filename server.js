@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 app.post('/authenticate', authController.authenticate)
 app.post('/signup', authController.signUp)
+app.use('/api/user', authController.getUser)
 app.post('/api/posts', postController.create)
 app.put('/api/update', postController.update)
 app.get('/api/posts', postController.list)

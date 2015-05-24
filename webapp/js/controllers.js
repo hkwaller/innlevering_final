@@ -1,6 +1,6 @@
-angular.module('secret.controllers', [])
+angular.module('app.controllers', [])
 
-.controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', 'ngNotify', function($scope, $http, $animate, $window, $location, $rootScope, ngNotify) {
+.controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', 'ngNotify', 'UserService', function($scope, $http, $animate, $window, $location, $rootScope, ngNotify, UserService) {
   $scope.user = {
     'username': 'kung',
     'password': 'cool'
@@ -46,11 +46,7 @@ angular.module('secret.controllers', [])
 	};
 }])
     
-.controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'ngNotify', function($scope, $window, $location, $resource, ngNotify) {    
-    $scope.logout = function() {
-        delete $window.sessionStorage.token;
-        $location.path('/');
-    }
+.controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'ngNotify', '$http', 'UserService', function($scope, $window, $location, $resource, ngNotify, $http, UserService) {    
     
     var Posts = $resource('http://localhost:3000/api/posts');
 
@@ -58,6 +54,7 @@ angular.module('secret.controllers', [])
 
     Posts.query(function(results) {
         $scope.posts = results;
+
     });
     
     $scope.postController = false;
@@ -106,9 +103,14 @@ angular.module('secret.controllers', [])
     $scope.edit = function(post) {
         $location.path('/edit/' + post._id);
     }
+    
+    $scope.logout = function() {
+        UserService.logout();
+    }
+    
 }])
     
-.controller('PostCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$timeout', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $timeout) {    
+.controller('PostCtrl', ['$scope', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$timeout', 'UserService', function($scope, $rootScope, $location, $http, $window, ngNotify, $timeout, UserService) {    
     $scope.postController = true;
 
     $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
@@ -120,6 +122,7 @@ angular.module('secret.controllers', [])
                 duration: 2000
             });
         } else {
+            post.username = $rootScope.username;
             $http.post('/api/posts', post)
                 .success(function(newPost) {
                     ngNotify.set('Your post was added to the brilliant archive', {
@@ -138,13 +141,11 @@ angular.module('secret.controllers', [])
     }
     
     $scope.logout = function() {
-        delete $window.sessionStorage.token;
-        $http.defaults.headers.common['X-Auth'] = null;
-        $location.path('/');
+        UserService.logout();
     }
 }])
 
-.controller('EditCtrl', ['$scope', '$resource', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', '$timeout', function($scope, $resource, $rootScope, $location, $http, $window, ngNotify, $stateParams, $timeout) {    
+.controller('EditCtrl', ['$scope', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', '$timeout', 'UserService', function($scope, $rootScope, $location, $http, $window, ngNotify, $stateParams, $timeout, UserService) {    
 
     console.log($stateParams.id)
 

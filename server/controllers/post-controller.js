@@ -7,6 +7,7 @@ module.exports.create = function(req, res) {
     if (req.headers['x-auth']) {
         var post = new Post(req.body);
         var auth = jwt.decode(req.headers['x-auth'], secret)
+        
         post.save(function(err, result) {
             if (err) return err;
             websockets.broadcast('new_post', result)
