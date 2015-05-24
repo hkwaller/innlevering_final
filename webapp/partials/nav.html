@@ -9,7 +9,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li id="current-user"><a href="#/main">Logged in as: {{ username }}</a></li>
+        <li><a href="#/main" id="current-user">Logged in as: <span ng-model="currentUser">{{ username }}</span></a></li>
         <li ng-class="{ 'active': !postController }"><a id="posts" href="#/main">Posts</a></li>
         <li ng-class="{ 'active': postController }"><a id="write-post" href="#/post">Write a post</a></li>
         <li ng-click="logout()"><a href="#">Log out</a></li>

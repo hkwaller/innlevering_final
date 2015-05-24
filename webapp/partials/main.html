@@ -9,12 +9,12 @@
         <div class="col col-md-12 text-center">
             <div class="timeline">
 				  <dl ng-repeat="post in posts | orderBy:'-date'">
-					  <dd class="pos-right clearfix" ng-class="{'pos-left': $even }">
+					  <dd class="pos-left clearfix" ng-class="{'pos-right': $odd }">
 						  <div class="circ"></div>
 						  <div class="events">
                               <div class="bonus-padding">
                                   <div class="events-body bonus-padding">
-                                      <h4 class="events-heading">{{ post.title }}</h4>
+                                      <h4 class="events-heading headz">{{ post.title }}</h4>
                                       <p>{{ post.text }}</p>
                                       <h4 class="events-heading">posted by {{ post.username }}</h4>
                                   </div>

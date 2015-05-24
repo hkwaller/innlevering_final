@@ -10,7 +10,10 @@ module.exports.create = function(req, res) {
         
         post.save(function(err, result) {
             if (err) return err;
-            websockets.broadcast('new_post', result)
+            
+            if (post.public) {
+                websockets.broadcast('new_post', result)
+            }
             res.status(201).json(result);
         })
     }
@@ -28,7 +31,9 @@ module.exports.delete = function(req, res) {
         if (err) return err;
         
         post.remove(function(err, result){
-          websockets.broadcast('delete_post', result)
+          if (post.public) {
+              websockets.broadcast('delete_post', result)
+          }
           res.status(200).json(post);
         });
     });
@@ -54,7 +59,11 @@ module.exports.update = function(req, res) {
         
         result.save(function(err, result) {
             if (err) return err;
-            //websockets.broadcast('new_post', result)
+            
+            if (result.public) {
+                websockets.broadcast('update_post', result)
+            }
+            
             res.status(201).json(result);
         })
         

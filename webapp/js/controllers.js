@@ -1,11 +1,11 @@
 angular.module('app.controllers', [])
 
 .controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', 'ngNotify', 'UserService', function($scope, $http, $animate, $window, $location, $rootScope, ngNotify, UserService) {
-  $scope.user = {
-    'username': 'kung',
-    'password': 'cool'
-  }
-    
+//  $scope.user = {
+//    'username': 'kung',
+//    'password': 'cool'
+//  }
+//    
   $scope.login = function(user) {
     $http.post('/authenticate', {username: user.username, password: user.password})
       .success(function (data, status, headers, config) {
@@ -83,6 +83,21 @@ angular.module('app.controllers', [])
                 }
             })
         })
+    });    
+    
+    $scope.$on('ws:update_post', function(_, post) {
+        $scope.$apply(function() {
+            angular.forEach($scope.posts, function(val, key) {
+                if (val._id === post._id) {
+                    val = post;
+                    ngNotify.set('Someone updated a post', {
+                        type: 'info',
+                        duration: 2000
+                    });
+                    return;
+                }
+            })
+        })
     });
     
     
@@ -147,8 +162,6 @@ angular.module('app.controllers', [])
 }])
 
 .controller('EditCtrl', ['$scope', '$rootScope', '$location', '$http', '$window', 'ngNotify', '$stateParams', '$timeout', 'UserService', function($scope, $rootScope, $location, $http, $window, ngNotify, $stateParams, $timeout, UserService) {    
-
-    console.log($stateParams.id)
 
     $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
 

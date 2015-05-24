@@ -13,9 +13,15 @@ describe('register and login', function() {
         element(by.model('user.password')).sendKeys('test')
         element(by.id('login')).click()
         
+        var name = "test"
+        
         browser.waitForAngular().then(function() {
-            expect(element(by.id("current-user")).getText()).to.contain("test")
+            element.all(by.model('currentUser')).getText().then(function(username) {
+                expect(username).to.contain(name)
+            })
         })
+        
+        
     })
     afterEach(function() {
         db.connection.db.dropDatabase()

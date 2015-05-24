@@ -57,8 +57,10 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
         
         connection.onmessage = function(e) {
             var payload = JSON.parse(e.data);
-            if (payload.data.public) {
-                $rootScope.$broadcast('ws:' + payload.topic, payload.data);
+            if (payload.data !== undefined) {
+                if (payload.data.public) {
+                    $rootScope.$broadcast('ws:' + payload.topic, payload.data);
+                }
             }
         }
 
