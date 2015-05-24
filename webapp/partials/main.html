@@ -17,6 +17,7 @@
                                       <h4 class="events-heading" ng-model="title">{{ post.title }}</h4>
                                       <p>{{ post.text }}</p>
                                       <h4 class="events-heading">posted by {{ post.username }}</h4>
+                                      <h4 class="events-heading">public {{ post.public }}</h4>
                                   </div>
                                   <button class="btn btn-info" ng-click="edit(post)">edit</button>
                                   <button class="btn btn-warning" ng-click="delete(post)">delete</button>

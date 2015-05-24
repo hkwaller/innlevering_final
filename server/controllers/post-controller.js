@@ -1,13 +1,13 @@
 var Post = require('../models/post')
 var websockets = require('../websockets')
 var jwt = require('jwt-simple')
-var secret = 'supermegasecret'
+var config = require('../../config')
+
 
 module.exports.create = function(req, res) {    
     if (req.headers['x-auth']) {
         var post = new Post(req.body);
-        var auth = jwt.decode(req.headers['x-auth'], secret)
-        
+        var auth = jwt.decode(req.headers['x-auth'], config.secret)
         post.save(function(err, result) {
             if (err) return err;
             
@@ -20,10 +20,20 @@ module.exports.create = function(req, res) {
 }
 
 module.exports.list = function(req, res) {
-    Post.find({}, function(err, results) {
-        if (err) return err;
-        res.status(200).json(results);
-    });
+    if (req.headers['x-auth']) {
+        var post = new Post(req.body);
+        var auth = jwt.decode(req.headers['x-auth'], config.secret)
+        Post.find()
+            .or([{public: true}, {username: auth.username}])
+            .sort("-date")
+            .exec(function (err, posts) {
+                if (err) {
+                    return next(err);
+                }
+                return res.json(posts);
+            });
+        
+    }
 }
 
 module.exports.delete = function(req, res) {

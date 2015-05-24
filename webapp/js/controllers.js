@@ -1,11 +1,11 @@
 angular.module('app.controllers', [])
 
 .controller('LoginCtrl', ['$scope', '$http', '$animate', '$window', '$location', '$rootScope', 'ngNotify', 'UserService', function($scope, $http, $animate, $window, $location, $rootScope, ngNotify, UserService) {
-//  $scope.user = {
-//    'username': 'kung',
-//    'password': 'cool'
-//  }
-//    
+  $scope.user = {
+    'username': 'test',
+    'password': 'test'
+  }
+    
   $scope.login = function(user) {
     $http.post('/authenticate', {username: user.username, password: user.password})
       .success(function (data, status, headers, config) {
@@ -50,17 +50,23 @@ angular.module('app.controllers', [])
 	};
 }])
     
-.controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'ngNotify', '$http', 'UserService', function($scope, $window, $location, $resource, ngNotify, $http, UserService) {    
+.controller('MainCtrl', ['$scope', '$window', '$location', '$rootScope', 'ngNotify', '$http', 'UserService', function($scope, $window, $location, $rootScope, ngNotify, $http, UserService) {    
     
-    var Posts = $resource('http://' + $location.host() + ':' + $location.port() + '/api/posts');
-
     $scope.posts = [];
-
-    Posts.query(function(results) {
-        $scope.posts = results;
-
-    });
     
+    $http.defaults.headers.common['X-Auth'] = $rootScope.token
+
+    $http.get('/api/posts')
+            .success(function(posts) {
+                $scope.posts = posts;
+            })
+            .error(function(err) {
+                ngNotify.set('Something went wrong. I don\'t know what', {
+                        type: 'error',
+                        duration: 2000
+                    });
+            });
+              
     $scope.postController = false;
     
     $scope.$on('ws:new_post', function(_, post) {
@@ -120,6 +126,7 @@ angular.module('app.controllers', [])
     }
     
     $scope.edit = function(post) {
+        
         $location.path('/edit/' + post._id);
     }
     

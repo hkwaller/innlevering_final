@@ -2,14 +2,13 @@ var bcrypt = require('bcrypt')
 var User = require('../models/user')
 var jwt = require('jwt-simple')
 var _ = require('lodash')
-
-var secret = 'supermegasecret';
+var config = require('../../config')
 var currentUser = {}
 
 module.exports.authenticate = function(req, res, next) {
     var username = req.body.username
     
-    User.findOne({username: username}).select('password').exec(function(err, user) {
+    User.findOne({username: username}).select('password').select('username').exec(function(err, user) {
         if (err) { return next(err) }
         if (!user) { return res.sendStatus(401) }   
         bcrypt.compare(req.body.password, user.password, function(err, valid) {
@@ -17,7 +16,7 @@ module.exports.authenticate = function(req, res, next) {
             if (!valid) { return res.sendStatus(401) }
             
             var currentUser = user
-            var token = jwt.encode({username: user.username}, secret)
+            var token = jwt.encode({username: user.username}, config.secret)
             res.json(token)
         })
     })
@@ -45,7 +44,7 @@ module.exports.getUser = function(res, req, next) {
     if (!req.headers['x-auth']) {
         return res.status(401)
     }
-    var auth = jwt.decode(req.headers['x-auth'], secret)
+    var auth = jwt.decode(req.headers['x-auth'], config.secret)
     User.findOne({username: auth.username}, function (err, user) {
         if (err) { return next(err) }
         res.json(user)
