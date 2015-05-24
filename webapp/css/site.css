@@ -30,3 +30,7 @@ body {
 .circ {
     background-color: #48cfad !important;
 }
+
+.toggle .handle {
+    top: 0;
+}

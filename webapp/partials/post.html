@@ -11,10 +11,12 @@
                 <label>Your text</label>
                 <textarea class="form-control" placeholder="Your text here" rows="3" ng-model="post.text"></textarea>
               </div>
+                <label class="checkbox-title">Public</label>
                 <div class="checkbox">
-                  <label>
-                    <input type="checkbox" id="public" ng-model="post.public">Public
-                  </label>
+                  <label class="toggle">
+                      <input type="checkbox" ng-model="post.public" checked="">
+                      <span class="handle"></span>
+                    </label>    
                 </div>
             </form>
         </div>

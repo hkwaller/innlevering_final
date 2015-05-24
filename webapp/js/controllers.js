@@ -63,7 +63,7 @@ angular.module('app.controllers', [])
         $scope.$apply(function() {
             $scope.posts.unshift(post);
             ngNotify.set('A new post was posted', {
-                type: 'success',
+                type: 'info',
                 duration: 2000
             });
         })
@@ -75,7 +75,7 @@ angular.module('app.controllers', [])
                 if (val._id === post._id) {
                     $scope.posts.splice($scope.posts.indexOf(val), 1);
                     ngNotify.set('Someone deleted a post :(', {
-                        type: 'error',
+                        type: 'warn',
                         duration: 2000
                     });
 
@@ -116,13 +116,14 @@ angular.module('app.controllers', [])
     $http.defaults.headers.common['X-Auth'] = $window.sessionStorage.token;
 
     $scope.submit = function(post) {
-        if (post.title === undefined || post.text === undefined) {
+        if (post === undefined) {
              ngNotify.set('Empty post, eh?', {
                 type: 'error',
                 duration: 2000
             });
         } else {
             post.username = $rootScope.username;
+            
             $http.post('/api/posts', post)
                 .success(function(newPost) {
                     ngNotify.set('Your post was added to the brilliant archive', {
