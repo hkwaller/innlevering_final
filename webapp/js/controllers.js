@@ -17,6 +17,10 @@ angular.module('app.controllers', [])
       })
       .error(function (data, status, headers, config) {
         delete $window.sessionStorage.token;
+        ngNotify.set('Something went wrong, try again', {
+            type: 'error',
+            duration: 2000
+        });
       });
   }
   
@@ -48,7 +52,7 @@ angular.module('app.controllers', [])
     
 .controller('MainCtrl', ['$scope', '$window', '$location', '$resource', 'ngNotify', '$http', 'UserService', function($scope, $window, $location, $resource, ngNotify, $http, UserService) {    
     
-    var Posts = $resource('http://localhost:3000/api/posts');
+    var Posts = $resource('http://' + $location.host() + ':' + $location.port() + '/api/posts');
 
     $scope.posts = [];
 

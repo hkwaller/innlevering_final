@@ -12,7 +12,7 @@
         <li><a href="#/main" id="current-user">Logged in as: <span ng-model="currentUser">{{ username }}</span></a></li>
         <li ng-class="{ 'active': !postController }"><a id="posts" href="#/main">Posts</a></li>
         <li ng-class="{ 'active': postController }"><a id="write-post" href="#/post">Write a post</a></li>
-        <li ng-click="logout()"><a href="#">Log out</a></li>
+        <li ng-click="logout()" id="logout"><a href="#">Log out</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

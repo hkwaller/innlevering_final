@@ -17,14 +17,20 @@ describe('making a post', function() {
                 text: "test"
             }
 
-            element(by.model('post')).sendKeys(post)
+            element(by.model('post.title')).sendKeys(post.title)
+            element(by.model('post.text')).sendKeys(post.text)
             
-            element(by.id('submit-post')).click()
-            element(by.id('posts')).click()
-
-            element.all(by.css('headz').getText().then(function(text) {
-                expect.text.to.contain(post.title)
-            }))
+            element(by.id('submit-post')).click().then(function() {
+                element(by.id('posts')).click().then(function() {
+                    browser.waitForAngular().then(function() {
+                         element.all(by.model('title')).getText().then(function(text) {
+                            expect(text).to.contain('test')
+                        })
+                     })
+                })
+            })
+            
+             
         })
         
     })
