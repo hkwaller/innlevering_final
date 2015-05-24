@@ -14,16 +14,18 @@ describe('making a post', function() {
         browser.waitForAngular().then(function() {
             var post = {
                 title: "test",
-                text: "test"
+                text: "test",
+                public: true
             }
 
             element(by.model('post.title')).sendKeys(post.title)
             element(by.model('post.text')).sendKeys(post.text)
+//            element(by.model('post.public')).sendKeys(post.public)
             
             element(by.id('submit-post')).click().then(function() {
                 element(by.id('posts')).click().then(function() {
                     browser.waitForAngular().then(function() {
-                         element.all(by.model('title')).getText().then(function(text) {
+                         element(by.model('title')).getText().then(function(text) {
                             expect(text).to.contain('test')
                         })
                      })

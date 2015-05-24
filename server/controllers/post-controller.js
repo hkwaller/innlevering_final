@@ -58,11 +58,9 @@ module.exports.postById = function(req, res) {
 }
 
 module.exports.update = function(req, res) {
-    console.log(req.body);
     Post.findById(req.body._id, function(err, result) {
         if (err) return err;
         
-        console.log(result);
         result.title = req.body.title
         result.text = req.body.text
         result.public = req.body.public

@@ -40,7 +40,13 @@ module.exports.signUp = function(req, res, next) {
 	});
 }
 
-module.exports.getUser = function(res, req, next) {
-    
-    
+
+module.exports.currentUser = function(req, res, next) {
+    if (req.headers['x-auth']) {
+        var auth = jwt.decode(req.headers['x-auth'], config.secret)
+        User.findOne({username: auth.username}, function (err, user) {
+            if (err) { return next(err) }
+            res.json(user)
+        })
+    }
 }

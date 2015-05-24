@@ -24,10 +24,6 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
         if (!window.sessionStorage.token) {
             $state.go('login')
         } else {
-            $http.defaults.headers.common['x-auth'] = window.sessionStorage.token;
-            $http.get('/user').success(function(user) {
-                $rootScope.username = user.username;
-            })
             $rootScope.token = window.sessionStorage.token;
         }
       }
@@ -41,9 +37,8 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
         if (!window.sessionStorage.token) {
             $state.go('login')
         } else {
-                        $http.defaults.headers.common['X-Auth'] = window.sessionStorage.token;
-
             $rootScope.token = window.sessionStorage.token;
+            
         }
       }
     })
@@ -56,9 +51,6 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
         if (!window.sessionStorage.token) {
             $state.go('login')
         } else {
-            $http.get('/api/user').success(function(user) {
-                $rootScope.username = user.username;
-            })
             $rootScope.token = window.sessionStorage.token;
         }
       }

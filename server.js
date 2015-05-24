@@ -9,15 +9,13 @@ var express =               require('express'),
     db =                    require('./db.js'),
     auth =                  require('./auth')
 
-var secret = 'supermegasecret'
-
 app.use('/', express.static(__dirname + '/webapp/'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/authenticate', authController.authenticate)
 app.post('/signup', authController.signUp)
-app.get('/user', authController.getUser)
+app.get('/currentUser', authController.currentUser)
 app.post('/api/posts', postController.create)
 app.put('/api/update', postController.update)
 app.get('/api/posts', postController.list)

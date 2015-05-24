@@ -4,7 +4,7 @@ angular.module('app.services', [])
     var service = this;
     
     this.getUser = function() {
-        return $http.get('/api/user', {
+        return $http.get('/currentUser', {
             headers: { 'X-Auth': window.sessionStorage.token }
         })
     }
