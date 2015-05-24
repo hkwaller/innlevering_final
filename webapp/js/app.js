@@ -20,9 +20,15 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
       url: "/main",
       templateUrl: "partials/main.html",
       controller: 'MainCtrl',
-      onEnter: function($state) {
+      onEnter: function($state, $rootScope, $http) {
         if (!window.sessionStorage.token) {
             $state.go('login')
+        } else {
+            $http.defaults.headers.common['x-auth'] = window.sessionStorage.token;
+            $http.get('/user').success(function(user) {
+                $rootScope.username = user.username;
+            })
+            $rootScope.token = window.sessionStorage.token;
         }
       }
     })
@@ -31,9 +37,13 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
       url: "/post",
       templateUrl: "partials/post.html",
       controller: 'PostCtrl',
-      onEnter: function($state) {
+      onEnter: function($state, $rootScope, $http) {
         if (!window.sessionStorage.token) {
             $state.go('login')
+        } else {
+                        $http.defaults.headers.common['X-Auth'] = window.sessionStorage.token;
+
+            $rootScope.token = window.sessionStorage.token;
         }
       }
     })
@@ -42,6 +52,16 @@ angular.module('TopSecret', ['app.controllers', 'app.services', 'ui.router', 'ng
       url: "/edit/:id",
       templateUrl: "partials/edit.html",
       controller: 'EditCtrl',
+      onEnter: function($state, $rootScope, $http) {
+        if (!window.sessionStorage.token) {
+            $state.go('login')
+        } else {
+            $http.get('/api/user').success(function(user) {
+                $rootScope.username = user.username;
+            })
+            $rootScope.token = window.sessionStorage.token;
+        }
+      }
     })
 })
 

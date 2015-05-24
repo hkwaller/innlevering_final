@@ -41,12 +41,6 @@ module.exports.signUp = function(req, res, next) {
 }
 
 module.exports.getUser = function(res, req, next) {
-    if (!req.headers['x-auth']) {
-        return res.status(401)
-    }
-    var auth = jwt.decode(req.headers['x-auth'], config.secret)
-    User.findOne({username: auth.username}, function (err, user) {
-        if (err) { return next(err) }
-        res.json(user)
-    })
+    
+    
 }

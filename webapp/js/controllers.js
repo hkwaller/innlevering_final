@@ -53,9 +53,8 @@ angular.module('app.controllers', [])
 .controller('MainCtrl', ['$scope', '$window', '$location', '$rootScope', 'ngNotify', '$http', 'UserService', function($scope, $window, $location, $rootScope, ngNotify, $http, UserService) {    
     
     $scope.posts = [];
-    
     $http.defaults.headers.common['X-Auth'] = $rootScope.token
-
+    
     $http.get('/api/posts')
             .success(function(posts) {
                 $scope.posts = posts;
@@ -126,7 +125,6 @@ angular.module('app.controllers', [])
     }
     
     $scope.edit = function(post) {
-        
         $location.path('/edit/' + post._id);
     }
     
